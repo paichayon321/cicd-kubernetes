@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         PATH = "/usr/local/go/bin:$PATH"
+        DOCKER_IMAGE_NAME = "chrisgreene/go-cicd-kubernetes"
     }
     stages {
         stage('Build') {
@@ -16,7 +17,7 @@ pipeline {
             }
             steps {
                 script {
-                    app = docker.build("chrisgreene/gocicd")
+                    app = docker.build(DOCKER_IMAGE_NAME)
                     app.withRun("-d -p 8181:8181") { c ->
                         sh 'curl localhost:8181'
                     }    
