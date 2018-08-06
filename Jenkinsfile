@@ -16,7 +16,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh 'whoami'
+                echo sh(script: 'whoami', returnStdout: true)
                 script {
                     app = docker.build(DOCKER_IMAGE_NAME)
                     app.withRun("-d -p 8181:8181") { c ->
