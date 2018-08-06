@@ -46,7 +46,6 @@ pipeline {
                 milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'pks_client', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
-                        echo sh(script: 'ls -al', returnStdout: true)
                         sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl delete all -l app=gocicd\""
                     }
                 }
