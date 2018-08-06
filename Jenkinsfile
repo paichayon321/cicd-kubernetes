@@ -59,10 +59,11 @@ pipeline {
                 //milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'kube-master', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
-                        sh(script: 'ls -al', returnStdout: true).result
+                        echo sh(script: 'ls -al', returnStdout: true).result
+                        echo sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\"", returnStdout: true).result
                         try {
                             sh(script: 'ls -al', returnStdout: true).result
-                            echo sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\"", returnStdout: true).result
+                            
                             //sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\""
                         } catch (err) {
                             echo: 'caught error: $err'
