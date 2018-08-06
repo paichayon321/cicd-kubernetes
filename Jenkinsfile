@@ -63,7 +63,7 @@ pipeline {
             }
             steps {
                 //milestone(1)
-                try(10) {
+                retry(10) {
                     withCredentials([usernamePassword(credentialsId: 'kube_master', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                         script {
                             sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl get all -l app=gocicd -o wide\""
