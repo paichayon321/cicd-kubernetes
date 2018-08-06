@@ -60,10 +60,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'kube-master', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
                         echo sh(script: 'ls -al', returnStdout: true)
-                        echo sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\"", returnStdout: true).result
+                        echo sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\"", returnStdout: true)
                         try {
-                            sh(script: 'ls -al', returnStdout: true).result
-                            
                             //sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\""
                         } catch (err) {
                             echo: 'caught error: $err'
