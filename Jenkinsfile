@@ -44,6 +44,12 @@ pipeline {
             steps {
                 //input 'Deploy to Production?'
                 milestone(1)
+                withCredentials([usernamePassword(credentialsId: 'kube_master', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                    script {
+                        echo sh(script: 'ls -al', returnStdout: true)
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl delete all -l app=gocicd\""
+                    }
+                }
                 kubernetesDeploy(
                   kubeconfigId: 'kubeconfig',
                   configs: 'kubernetes.yaml',
@@ -59,8 +65,6 @@ pipeline {
                 //milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'kube_master', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
-                        echo sh(script: 'ls -al', returnStdout: true)
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl delete all -l app=gocicd\""
                         try {
                             //echo sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip ls -la", returnStdout: true)
                             //sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\""
