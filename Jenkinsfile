@@ -46,7 +46,7 @@ pipeline {
                 milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'pks_client', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl delete all -l app=gocicd\""
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$pks_client \"kubectl delete all -l app=gocicd\""
                     }
                 }
                 kubernetesDeploy(
@@ -65,7 +65,7 @@ pipeline {
                 retry(10) {
                     withCredentials([usernamePassword(credentialsId: 'pks_client', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                         script {
-                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl get all -l app=gocicd -o wide\""
+                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$pks_client \"kubectl get all -l app=gocicd -o wide\""
                             def ip = sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl get svc gocicd --output=jsonpath={'.spec.clusterIP'}\"", returnStdout: true)
                             echo "IP is ${ip}"
                             echo "URL is http://${ip}"
