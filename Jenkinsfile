@@ -16,7 +16,6 @@ pipeline {
                 branch 'master'
             }
             steps {
-                echo sh(script: 'whoami', returnStdout: true)
                 script {
                     app = docker.build(DOCKER_IMAGE_NAME)
                     app.withRun("-d -p 8181:8181") { c ->
@@ -65,7 +64,7 @@ pipeline {
             steps {
                 //milestone(1)
                 retry(10) {
-                    withCredentials([usernamePassword(credentialsId: 'kube_master', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'pks_client', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                         script {
                             sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl get all -l app=gocicd -o wide\""
                             def ip = sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl get svc gocicd --output=jsonpath={'.spec.clusterIP'}\"", returnStdout: true)
