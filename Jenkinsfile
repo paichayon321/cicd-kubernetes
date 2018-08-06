@@ -56,7 +56,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                input 'Get Service IP'
+                milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'kube-master', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
                         try {
