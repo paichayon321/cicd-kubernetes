@@ -67,7 +67,9 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'kube_master', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                         script {
                             sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl get all -l app=gocicd -o wide\""
-                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl get svc gocicd --output=jsonpath={'.spec.clusterIP'}\""
+                            def ip = sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube_master_ip \"kubectl get svc gocicd --output=jsonpath={'.spec.clusterIP'}\""
+                            echo "IP is ${ip}"
+                            echo "URL is http://${ip}"
                             try {
                              //echo sh(script: "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip ls -la", returnStdout: true)
                              //sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$kube-master-ip \"/usr/bin/touch /tmp/jenkins\""
