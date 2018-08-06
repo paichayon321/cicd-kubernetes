@@ -37,12 +37,12 @@ pipeline {
                 }
             }
         }
-        stage('DeployToProduction') {
+        stage('DeployToPKS') {
             when {
                 branch 'master'
             }
             steps {
-                //input 'Deploy to Production?'
+                //input 'Deploy to PKS?'
                 milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'pks_client', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
