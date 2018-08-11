@@ -2,12 +2,12 @@ pipeline {
     agent any
     environment {
         PATH = "/usr/local/go/bin:$PATH"
-        DOCKER_IMAGE_NAME = "chrisgreene/go-cicd-kubernetes"
+        DOCKER_IMAGE_NAME = "harbor.vmware.local/library/go-cicd-kubernetes:latest"
     }
     stages {
         stage('Build') {
             steps {
-                echo 'Running build automation'
+                echo 'Compiling Program'
                 sh 'go test -v'
             }
         }
@@ -30,7 +30,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub') {
+                    docker.withRegistry('https://harbor.vmware.local', 'harbor') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
@@ -42,7 +42,6 @@ pipeline {
                 branch 'master'
             }
             steps {
-                //input 'Deploy to PKS?'
                 milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'pks_client', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
