@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         PATH = "/usr/local/go/bin:$PATH"
-        DOCKER_IMAGE_NAME = "harbor.vmware.local/library/go-cicd-kubernetes:latest"
+        DOCKER_IMAGE_NAME = "harbor.vmware.local/library/go-cicd-kubernetes"
     }
     stages {
         stage('Build') {
