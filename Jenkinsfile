@@ -43,11 +43,13 @@ pipeline {
             }
             steps {
                 milestone(1)
+                /*
                 withCredentials([usernamePassword(credentialsId: 'pks_client', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
                         sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$pks_client \"kubectl delete all -l app=gocicd\""
                     }
                 }
+                */
                 kubernetesDeploy(
                   kubeconfigId: 'kubeconfig',
                   configs: 'kubernetes.yaml',
