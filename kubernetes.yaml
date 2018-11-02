@@ -1,35 +1,35 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: gocicd
+  name: demophp
 spec:
   type: LoadBalancer
   selector:
-    app: gocicd
+    app: demophp
   ports:
   - protocol: TCP
-    port: 8181
+    port: 80
 
 ---
 
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: gocicd
+  name: demophp
   labels:
-    app: gocicd
+    app: demophp
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: gocicd
+      app: demophp
   template:
     metadata:
       labels:
-        app: gocicd
+        app: demophp
     spec:
       containers:
-      - name: gocicd
+      - name: demophp
         image: $DOCKER_IMAGE_NAME:$BUILD_NUMBER
         ports:
-        - containerPort: 8181
+        - containerPort: 80
